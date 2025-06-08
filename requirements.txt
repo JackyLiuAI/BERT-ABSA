@@ -1,0 +1,15 @@
+contractions
+textblob
+spacy
+transformers
+numpy<2
+pandas
+matplotlib
+# warnings
+seaborn
+scikit-learn
+tensorflow
+# torch
+tqdm
+adapter-transformers==3.0.0
+# itertools
