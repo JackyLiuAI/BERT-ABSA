@@ -70,7 +70,7 @@ class ABSABert(torch.nn.Module):
 
 class ABSAModel ():
     def __init__(self, tokenizer, adapter):
-        self.model = ABSABert('bert-base-uncased', adapter)
+        self.model = ABSABert('/home/STU/ljq/Projects/BERT-ABSA/bert-base-uncased', adapter)
         self.tokenizer = tokenizer
         self.trained = False
         self.adapter = adapter
@@ -270,6 +270,7 @@ class ABSAModel ():
         if load_model is not None:
             if os.path.exists(load_model):
                 self.load_model(self.model, load_model)
+                self.model = self.model.to(device)
             else:
                 raise Exception('Model not found')
         else:
@@ -290,6 +291,8 @@ class ABSAModel ():
                 ids_tensors = ids_tensors.to(device)
                 segments_tensors = segments_tensors.to(device)
                 masks_tensors = masks_tensors.to(device)
+                # Make sure model is on the same device as input tensors
+                self.model = self.model.to(device)
 
                 outputs = self.model(ids_tensors, None, masks_tensors=masks_tensors, 
                                     segments_tensors=segments_tensors)

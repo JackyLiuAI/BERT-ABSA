@@ -165,5 +165,7 @@ cython_debug/
 #.idea/
 
 bert-base-uncased
-**/weights
+# **/weights
+**.pkl
 .vscode
+**/losses_*.txt

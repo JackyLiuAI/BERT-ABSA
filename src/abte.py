@@ -223,36 +223,40 @@ class ABTEModel ():
         if load_model is not None:
             if os.path.exists(load_model):
                 self.load_model(self.model, load_model)
+                self.model = self.model.to(device)  # 确保加载后模型在目标设备上
             else:
                 raise Exception('Model not found')
         else:
             if not self.trained:
                 raise Exception('model not trained')
 
-         # dataset and loader
+        # dataset and loader
         ds = ABTEDataset(dataset, self.tokenizer)
         loader = DataLoader(ds, batch_size=50, shuffle=True, collate_fn=self.padding)
 
-        pred = []#padded list
-        trueth = [] #padded list
+        pred = []  # padded list
+        trueth = []  # padded list
         with torch.no_grad():
             for data in tqdm(loader):
-                
+                # Ensure data is on the same device
                 ids_tensors, tags_tensors, _, masks_tensors = data
                 ids_tensors = ids_tensors.to(device)
                 tags_tensors = tags_tensors.to(device)
                 masks_tensors = masks_tensors.to(device)
 
+                # Make sure model is on the same device as input tensors
+                self.model = self.model.to(device)
+
                 outputs = self.model(ids_tensors=ids_tensors, tags_tensors=None, masks_tensors=masks_tensors)
-                
                 _, p = torch.max(outputs, dim=2)
 
-                pred += list([int(j) for i in p for j in i ])
-                trueth += list([int(j) for i in tags_tensors for j in i ])
-        
+                pred += list([int(j) for i in p for j in i])
+                trueth += list([int(j) for i in tags_tensors for j in i])
+
         acc = self._accuracy(pred, trueth)
         class_report = classification_report(trueth, pred, target_names=['none', 'start of AT', 'mark of AT'])
         return acc, class_report
+
 
     def accuracy(self, data, load_model=None, device='cpu'):
         a, p = self.test(data, load_model=load_model, device=device)

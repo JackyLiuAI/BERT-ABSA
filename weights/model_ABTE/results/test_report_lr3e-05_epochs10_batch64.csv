@@ -1,0 +1,10 @@
+              precision    recall  f1-score   support
+
+        none       0.96      0.97      0.96     48555
+ start of AT       0.51      0.43      0.47      3091
+  mark of AT       0.46      0.44      0.45      1602
+
+    accuracy                           0.92     53248
+   macro avg       0.64      0.61      0.63     53248
+weighted avg       0.92      0.92      0.92     53248
+
