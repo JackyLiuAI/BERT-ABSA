@@ -66,6 +66,7 @@ def target_predicted_wordcloud(targets, predicted, file_name):
     ax[1].set_title("Predicted")
     fig.savefig(file_name, dpi=300, bbox_inches='tight')
 
+
 def classification_report_read(report_path):
     """
     Read classification report from file
